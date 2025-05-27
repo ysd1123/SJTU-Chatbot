@@ -4,18 +4,6 @@ SJTU-Chatbot 是一个基于 Dify、利用 LLMs API 与 MCP 服务器交互的�
 
 SJTU-Chatbot MCP Server 是一个基于 FastMCP 的服务器实现，专为上海交通大学校园信息服务集成设计。它提供了与 jAccount 认证系统的无缝集成，以及一套灵活的工具开发框架，使开发者能够轻松创建并部署需要利用 jAccount 登录状态访问信息资源的 Python 脚本（tools）。
 
-## 目录
-
-- [环境要求](#环境要求)
-- [安装配置](#安装配置)
-- [快速开始](#快速开始)
-- [工具开发指南](#工具开发指南)
-- [MCP 服务器详解](#mcp-服务器详解)
-- [jAccount 登录集成](#jaccount-登录集成)
-- [部署建议](#部署建议)
-- [API 参考](#api-参考)
-- [许可证声明](#许可证声明)
-
 ## 环境要求
 
 - **Python**: 推荐使用 3.12.9
@@ -135,10 +123,6 @@ docker compose up -d
 
 ![alt text](./img/image.png)
 
----
-
-## MCP 服务器详解
-
 ## 工具开发指南
 
 ### 工具结构
@@ -248,14 +232,6 @@ sjtu_chatbot/
 ```
 
 MCP 服务器启动时会自动扫描 `sjtu_chatbot/tools` 目录下的所有模块，并注册使用 `@register_tool` 装饰的函数。
-
-### 工具开发最佳实践
-
-1. **错误处理**: 始终使用 `try-except` 捕获异常，返回友好的错误信息
-2. **登录检查**: 在工具函数开始处检查登录状态
-3. **会话使用**: 使用 `context.session` 而不是创建新的 requests.Session
-4. **返回格式**: 返回统一格式的结果，包含 `success` 字段和相应的数据或错误信息
-5. **文档说明**: 提供详细的函数文档字符串，说明参数和返回值
 
 ### 架构概述
 
@@ -382,25 +358,6 @@ uvicorn sjtu_chatbot.mcp_server.server:app --host 0.0.0.0 --port 1896 --workers 
 # 使用 Gunicorn 和 Uvicorn worker
 gunicorn sjtu_chatbot.mcp_server.server:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:1896
 ```
-
-## API 参考
-
-### MCP 服务器 API
-
-- **GET /mcp**: 获取 MCP 服务器信息
-- **POST /mcp/jsonrpc**: JSON-RPC 接口，用于工具调用
-- **GET /login/status**: 获取 jAccount 登录状态
-- **POST /login**: 登录 jAccount
-- **POST /logout**: 登出 jAccount
-
-### 主要类和函数
-
-- **create_mcp_server(config_path=None)**: 创建 MCP 服务器实例
-- **register_tool(name, description, require_login=True)**: 工具注册装饰器
-- **SJTUContext**: 上下文类，提供会话和登录状态管理
-- **JAccountLoginManager**: jAccount 登录管理器，单例模式
-
-详情请参考代码注释和函数文档字符串，这里的参考 API 不保证已经实现或及时更新同步。
 
 ## 许可证声明
 
