@@ -6,3 +6,4 @@ pillow~=11.2.1
 beautifulsoup4~=4.13.4
 getpass4~=0.0.14.1
 fastmcp~=2.4.0
+lxml

@@ -64,6 +64,13 @@ def register_tool(name: str = None, description: str = None, require_login: bool
         
         # 创建包装函数，处理登录检查
         @functools.wraps(func)
+        def wrapper(context: SJTUContext = None, *args, **kwargs):
+            if context is None:
+                context = SJTUContext()
+            if require_login and not context.is_logged_in():
+                raise ValueError(f"工具 {func_name} 需要 jAccount 登录才能使用")
+            return func(context, *args, **kwargs)
+        '''
         def wrapper(context: SJTUContext = None):
             # 创建上下文（如果没有提供）
             if context is None:
@@ -75,6 +82,7 @@ def register_tool(name: str = None, description: str = None, require_login: bool
             
             # 执行原始函数
             return func(context)
+        '''
         
         # 将工具信息存储在函数上
         wrapper._tool_info = {
@@ -429,8 +437,9 @@ class MCPStreamableHTTPServer:
             context = SJTUContext(session_id)
             
             # 调用工具
+            # tool_func = self.tools[tool_name]
+            # result = tool_func(context)
             tool_func = self.tools[tool_name]
-            result = tool_func(context)
             
             # 确保结果是字符串
             if not isinstance(result, str):
