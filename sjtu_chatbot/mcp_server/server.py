@@ -440,6 +440,7 @@ class MCPStreamableHTTPServer:
             # tool_func = self.tools[tool_name]
             # result = tool_func(context)
             tool_func = self.tools[tool_name]
+            result = tool_func(context, **arguments)
             
             # 确保结果是字符串
             if not isinstance(result, str):
